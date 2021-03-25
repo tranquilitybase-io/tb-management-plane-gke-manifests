@@ -258,22 +258,3 @@ spec:
             defaultMode: 420
             optional: true
             secretName: istio-ingressgateway-ca-certs
-status:
-  availableReplicas: 1
-  conditions:
-    - lastTransitionTime: "2020-05-25T20:14:34Z"
-      lastUpdateTime: "2020-05-25T20:14:34Z"
-      message: Deployment has minimum availability.
-      reason: MinimumReplicasAvailable
-      status: "True"
-      type: Available
-    - lastTransitionTime: "2020-05-25T20:14:18Z"
-      lastUpdateTime: "2020-05-25T20:14:34Z"
-      message: ReplicaSet "istio-ingressgateway-5d869f5bbf" has successfully progressed.
-      reason: NewReplicaSetAvailable
-      status: "True"
-      type: Progressing
-  observedGeneration: 1
-  readyReplicas: 1
-  replicas: 1
-  updatedReplicas: 1
