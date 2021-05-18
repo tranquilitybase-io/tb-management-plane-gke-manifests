@@ -10,9 +10,6 @@ metadata:
     operator.istio.io/version: 1.9.4
     release: istio
   name: istio-private-ingressgateway
-  resourceVersion: "19492"
-  selfLink: /apis/apps/v1/namespaces/istio-system/deployments/istio-ingressgateway
-  uid: 94cc4d2a-9fd1-4b30-98c1-f3d753a99d0b
 spec:
   progressDeadlineSeconds: 600
   replicas: 1
