@@ -18,7 +18,7 @@ metadata:
     release: istio
   name: istio-private-ingressgateway
   resourceVersion: "19797"
-  selfLink: /api/v1/namespaces/istio-system/services/istio-private-ingressgateway
+#  selfLink: /api/v1/namespaces/istio-system/services/istio-private-ingressgateway
   uid: ac31c5d5-9cbe-4f43-a894-de0e76ad800b
 spec:
   ports:
