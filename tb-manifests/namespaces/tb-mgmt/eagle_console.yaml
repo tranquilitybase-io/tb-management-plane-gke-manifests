@@ -307,13 +307,13 @@ spec:
               containerPort: 3306
           env:
             - name: MYSQL_ROOT_PASSWORD
-              value: my-secret-pw
+              value:
             - name: MYSQL_USER
-              value: eagle-user
+              value:
             - name: MYSQL_PASSWORD
-              value: eagle-user-secret-pw
+              value:
             - name: MYSQL_DATABASE
-              value: eagle_db
+              value:
           args:
             - --ignore-db-dir=lost+found
           volumeMounts:
