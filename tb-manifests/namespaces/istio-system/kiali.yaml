@@ -355,7 +355,6 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: kiali
-    namespace: istio-system
 ...
 ---
 # Source: kiali-server/templates/role-controlplane.yaml
@@ -401,7 +400,6 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: kiali
-    namespace: istio-system
 ...
 ---
 # Source: kiali-server/templates/service.yaml
