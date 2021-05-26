@@ -306,16 +306,16 @@ spec:
             - name: mysql57
               containerPort: 3306
           env:
-            # Use secret in real usage
-#            - name: MYSQL_ROOT_PASSWORD
-#              value:
-#            - name: MYSQL_USER
-#              value:
-            # Use secret in real usage
-#            - name: MYSQL_PASSWORD
-#              value:
-#            - name: MYSQL_DATABASE
-#              value:
+             Use secret in real usage
+            - name: MYSQL_ROOT_PASSWORD
+              value: temp_testing
+            - name: MYSQL_USER
+              value: temp_testing
+             Use secret in real usage
+            - name: MYSQL_PASSWORD
+              value: temp_testing
+            - name: MYSQL_DATABASE
+              value: temp_testing
           args:
             - --ignore-db-dir=lost+found
           volumeMounts:
