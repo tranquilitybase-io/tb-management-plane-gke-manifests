@@ -239,6 +239,7 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: kiali
+    namespace: istio-system
 ...
 
 ---
