@@ -148,10 +148,7 @@ spec:
               mountPath: "/etc/grafana/provisioning/dashboards/dashboardproviders.yaml"
               subPath: dashboardproviders.yaml
           ports:
-            - name: service
-              containerPort: 3000
-              protocol: TCP
-            - name: grafana
+            - name: service-grafana
               containerPort: 3000
               protocol: TCP
           env:
