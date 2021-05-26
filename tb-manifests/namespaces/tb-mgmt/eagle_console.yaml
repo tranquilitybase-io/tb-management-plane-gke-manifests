@@ -306,12 +306,10 @@ spec:
             - name: mysql57
               containerPort: 3306
           env:
-             Use secret in real usage
             - name: MYSQL_ROOT_PASSWORD
               value: my-secret-pw
             - name: MYSQL_USER
               value: eagle-user
-             Use secret in real usage
             - name: MYSQL_PASSWORD
               value: eagle-user-secret-pw
             - name: MYSQL_DATABASE
