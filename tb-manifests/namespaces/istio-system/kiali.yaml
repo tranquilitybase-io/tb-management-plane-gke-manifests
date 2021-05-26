@@ -137,6 +137,7 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: kiali
+    namespace: istio-system
 ...
 ---
 # Source: kiali-server/templates/service.yaml
