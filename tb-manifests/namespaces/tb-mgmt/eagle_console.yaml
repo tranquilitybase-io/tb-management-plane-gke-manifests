@@ -308,14 +308,14 @@ spec:
           env:
              Use secret in real usage
             - name: MYSQL_ROOT_PASSWORD
-              value: temp_testing
+              value: my-secret-pw
             - name: MYSQL_USER
-              value: temp_testing
+              value: eagle-user
              Use secret in real usage
             - name: MYSQL_PASSWORD
-              value: temp_testing
+              value: eagle-user-secret-pw
             - name: MYSQL_DATABASE
-              value: temp_testing
+              value: eagle_db
           args:
             - --ignore-db-dir=lost+found
           volumeMounts:
