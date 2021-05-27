@@ -12,10 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+### Namespace creation file for the shared gke cluster
+### Namespace for the eagle console and related services
 apiVersion: v1
-kind: ServiceAccount
+kind: Namespace
 metadata:
-  creationTimestamp: null
-  name: cicd-service-account
+  name: istio-system
   labels:
-    wi: enabled
+    name: istio-system

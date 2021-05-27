@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    cloud.google.com/load-balancer-type: "Internal"
+  finalizers:
+    - service.kubernetes.io/load-balancer-cleanup
+  labels:
+    app: istio-private-ingressgateway
+    install.operator.istio.io/owning-resource: example-istiocontrolplane
+    istio: private-ingressgateway
+    operator.istio.io/component: IngressGateways
+    operator.istio.io/managed: Reconcile
+    operator.istio.io/version: 1.9.4
+    release: istio
+  name: istio-private-ingressgateway
+spec:
+  ports:
+    - name: status-port
+      port: 15020
+      protocol: TCP
+      targetPort: 15020
+    - name: http2
+      port: 80
+      protocol: TCP
+      targetPort: 8080
+    - name: https
+      port: 443
+      protocol: TCP
+      targetPort: 8443
+    - name: tcp
+      port: 31400
+      protocol: TCP
+      targetPort: 31400
+    - name: tls
+      port: 15443
+      protocol: TCP
+      targetPort: 15443
+  selector:
+    app: istio-private-ingressgateway
+    istio: private-ingressgateway
+  sessionAffinity: None
+  type: LoadBalancer
