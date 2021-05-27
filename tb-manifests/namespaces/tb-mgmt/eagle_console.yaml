@@ -307,13 +307,25 @@ spec:
               containerPort: 3306
           env:
             - name: MYSQL_ROOT_PASSWORD
-              value:
+                valueFrom:
+                  secretKeyRef:
+                    name: ROOT_MYSQL_PASSWORD
+                    key: MYSQL_ROOT_PASSWORD
             - name: MYSQL_USER
-              value:
+                valueFrom:
+                  secretKeyRef:
+                    name: MYSQL_USERNAME
+                    key: MYSQL_USER
             - name: MYSQL_PASSWORD
-              value:
+                valueFrom:
+                  secretKeyRef:
+                    name: MYSQL_CRED
+                    key: MYSQL_PASSWORD
             - name: MYSQL_DATABASE
-              value:
+                valueFrom:
+                  secretKeyRef:
+                    name: MYSQL_DATABASE
+                    key: MYSQL_DATABASE
           args:
             - --ignore-db-dir=lost+found
           volumeMounts:
