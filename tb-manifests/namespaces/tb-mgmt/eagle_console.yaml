@@ -310,22 +310,22 @@ spec:
                 valueFrom:
                   secretKeyRef:
                     name: ROOT_MYSQL_PASSWORD
-                    key: MYSQL_ROOT_PASSWORD
+                    key: KEY_DATA
             - name: MYSQL_USER
                 valueFrom:
                   secretKeyRef:
                     name: MYSQL_USERNAME
-                    key: MYSQL_USER
+                    key: KEY_DATA
             - name: MYSQL_PASSWORD
                 valueFrom:
                   secretKeyRef:
                     name: MYSQL_CRED
-                    key: MYSQL_PASSWORD
+                    key: KEY_DATA
             - name: MYSQL_DATABASE
                 valueFrom:
                   secretKeyRef:
                     name: MYSQL_DATABASE
-                    key: MYSQL_DATABASE
+                    key: KEY_DATA
           args:
             - --ignore-db-dir=lost+found
           volumeMounts:
