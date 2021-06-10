@@ -1,4 +1,4 @@
-# Copyright 2019 The Tranquility Base Authors
+# Copyright 2021 The Tranquility Base Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,24 +12,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ---
+# MySQL's PersistentVolumeClaim
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: mysql-pv-claim
 spec:
-  storageClassName: mysql-sc
+  storageClassName: regional-retained-pd-ssd
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
       storage: 10Gi
 ---
+# Redis' persistentVolumeClaim
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: redis-pv-claim
 spec:
-  storageClassName: redis-sc
+  storageClassName: regional-retained-pd-ssd
   accessModes:
     - ReadWriteOnce
   resources:
@@ -45,10 +47,10 @@ metadata:
 spec:
   ports:
     - port: 80
-      targetPort: 4200
+      targetPort: 80
       name: http
     - port: 443
-      targetPort: 4200
+      targetPort: 80
       name: https
   selector:
     app: eagleconsole
@@ -125,7 +127,7 @@ spec:
     spec:
       containers:
         - name: eagleconsole
-          image: gcr.io/tranquility-base-images/tb-eagle-console:landingzone
+          image: gcr.io/tranquility-base-images/tb-eagle-console:v0.15.0
           resources:
             requests:
               cpu: "100m"
@@ -151,7 +153,7 @@ spec:
     spec:
       containers:
         - name: houstonservice
-          image: gcr.io/tranquility-base-images/tb-houston-service:landingzone
+          image: gcr.io/tranquility-base-images/tb-houston-service:v0.49.2
           resources:
             requests:
               cpu: "100m"
@@ -215,22 +217,27 @@ spec:
     spec:
       containers:
         - name: gcpdac
-          image: gcr.io/tranquility-base-images/tb-gcp-dac:landingzone
+          image: gcr.io/tranquility-base-images/tb-gcp-dac:v0.2.0
           resources:
             requests:
               cpu: "100m"
           imagePullPolicy: Always
+          command: ['/bin/sh', './src/main/bash/tranquilitybase/gcpdac/main/app_docker.sh']
           ports:
             - containerPort: 3100
           volumeMounts:
             - name: config-volume
-              mountPath: /app/ec-config.yaml
+              mountPath: /app/resources/ec-config.yaml
               subPath: ec-config.yaml
-#            - name: google-cloud-key
-#              mountPath: /var/secrets/google
+            - name: google-cloud-key
+              mountPath: /var/secrets/google
           env:
-#            - name: GOOGLE_APPLICATION_CREDENTIALS
-#              value: /var/secrets/google/ec-service-account-config.json
+            - name: APP_PORT
+              value: "3100"
+            - name: EC_CONFIG
+              value: /resources/ec-config.yaml
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /var/secrets/google/ec-service-account-config.json
             - name: CELERY_BROKER_URL
               value: redis://redis:6379
             - name: CELERY_RESULT_BACKEND
@@ -238,26 +245,38 @@ spec:
             - name: HOUSTON_SERVICE_URL
               value: 'houstonservice:80'
             - name: JENKINS_BASE_URL
-              value: 'jenkins-master-svc.cicd'
-
+              value: 'eagle-console.tranquilitybase-demo.io/jenkins-service'
+            - name: DAC_JENKINS_USER
+                secretKeyRef:
+                  name: dac-jenkins-user
+                  key: KEY_DATA
+            - name: DAC_JENKINS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: dac-jenkins-password
+                  key: KEY_DATA
         - name: gcpdacworker
-          image: gcr.io/tranquility-base-images/tb-gcp-dac:landingzone
+          image: gcr.io/tranquility-base-images/tb-gcp-dac:v0.2.0
           resources:
             requests:
               cpu: "100m"
           imagePullPolicy: Always
-          command: ['celery', '-E', '-A', 'celery_worker', 'worker', '--loglevel=info']
+          command: ['/bin/sh', './src/main/bash/tranquilitybase/gcpdac/celery_worker/celery_worker.sh']
           ports:
             - containerPort: 80
           volumeMounts:
             - name: config-volume
-              mountPath: /app/ec-config.yaml
+              mountPath: /app/resources/ec-config.yaml
               subPath: ec-config.yaml
-#            - name: google-cloud-key
-#              mountPath: /var/secrets/google
+            - name: google-cloud-key
+              mountPath: /var/secrets/google
           env:
-#            - name: GOOGLE_APPLICATION_CREDENTIALS
-#              value: /var/secrets/google/ec-service-account-config.json
+            - name: APP_PORT
+              value: "3200"
+            - name: EC_CONFIG
+              value: /resources/ec-config.yaml
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /var/secrets/google/ec-service-account-config.json
             - name: CELERY_BROKER_URL
               value: redis://redis:6379
             - name: CELERY_RESULT_BACKEND
@@ -265,15 +284,24 @@ spec:
             - name: HOUSTON_SERVICE_URL
               value: 'houstonservice:80'
             - name: JENKINS_BASE_URL
-              value: 'jenkins-master-svc.cicd'
-
+              value: 'eagle-console.tranquilitybase-demo.io/jenkins-service'
+            - name: DAC_JENKINS_USER
+              valueFrom:
+                secretKeyRef:
+                  name: dac-jenkins-user
+                  key: KEY_DATA
+            - name: DAC_JENKINS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: dac-jenkins-password
+                  key: KEY_DATA
       volumes:
         - name: config-volume
           configMap:
             name: ec-config
-#        - name: google-cloud-key
-#          secret:
-#            secretName: ec-service-account
+        - name: google-cloud-key
+          secret:
+            secretName: ec-service-account
 ---
 apiVersion: apps/v1  # for versions before 1.9.0 use apps/v1beta2
 kind: Deployment
@@ -297,7 +325,7 @@ spec:
             claimName: mysql-pv-claim
       containers:
         - name: mysql57
-          image: gcr.io/tranquility-base-images/tb-db:landingzone
+          image: gcr.io/tranquility-base-images/tb-db:v0.1.1
           resources:
             requests:
               cpu: "100m"
@@ -309,24 +337,17 @@ spec:
             - name: MYSQL_ROOT_PASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: ROOT_MYSQL_PASSWORD
+                    name: mysql-root-password
                     key: KEY_DATA
             - name: MYSQL_USER
-                valueFrom:
-                  secretKeyRef:
-                    name: MYSQL_USERNAME
-                    key: KEY_DATA
+              value: eagle-user
             - name: MYSQL_PASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: MYSQL_CRED
+                    name: mysql-password
                     key: KEY_DATA
             - name: MYSQL_DATABASE
-                valueFrom:
-                  secretKeyRef:
-                    name: MYSQL_DATABASE
-                    key: KEY_DATA
-          args:
+              value: eagle_db
             - --ignore-db-dir=lost+found
           volumeMounts:
             - mountPath: /var/lib/mysql
