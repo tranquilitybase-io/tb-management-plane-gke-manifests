@@ -1,0 +1,11 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: selfsigned-cert
+  namespace: cert-manager-tb
+spec:
+  dnsNames:
+    - eagle-console.tranquilitybase-demo.io
+  secretName: ec-tls-credential
+  issuerRef:
+    name: tb-selfsigned
