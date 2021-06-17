@@ -2,7 +2,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: selfsigned-cert
-  namespace: cert-manager-tb
+  namespace: istio-system
 spec:
   dnsNames:
     - eagle-console.tranquilitybase-demo.io
