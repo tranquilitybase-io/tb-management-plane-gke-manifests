@@ -117,9 +117,9 @@ spec:
         - name: config-volume
           configMap:
             name: ec-config
-        - name: google-cloud-key
-          secret:
-            secretName: ec-service-account
+        # - name: google-cloud-key
+        #   secret:
+        #     secretName: ec-service-account
         - name: jenkins-home
           persistentVolumeClaim:
             claimName: jenkins-master-pv-claim
