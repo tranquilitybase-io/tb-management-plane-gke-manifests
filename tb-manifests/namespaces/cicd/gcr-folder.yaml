@@ -12,11 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# 
-### Namespace for the devops related tools
 apiVersion: v1
-kind: Namespace
+kind: Secret
 metadata:
-  name: cicd
-  labels:
-    name: cicd
+  name: gcr-folder
+stringData:
+  folder: "94033905990"
