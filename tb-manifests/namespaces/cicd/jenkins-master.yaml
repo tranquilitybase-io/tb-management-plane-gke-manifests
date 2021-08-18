@@ -83,6 +83,8 @@ spec:
           env:
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: /var/secrets/google/ec-service-account-config.json
+            - name: kubernetes_jenkins_token
+              value: /var/secrets/google/kubernetes_jenkins_token.json
             - name: DAC_JENKINS_USER
               valueFrom:
                 secretKeyRef:
