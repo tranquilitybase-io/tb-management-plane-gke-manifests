@@ -83,8 +83,6 @@ spec:
           env:
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: /var/secrets/google/ec-service-account-config.json
-            - name: kubernetes_jenkins_token
-              value: /var/secrets/google/kubernetes_jenkins_token.json
             - name: DAC_JENKINS_USER
               valueFrom:
                 secretKeyRef:
@@ -100,6 +98,11 @@ spec:
                 secretKeyRef:
                   name: gcr-folder
                   key: folder
+            - name: cicd-service-account-token
+                valueFrom:
+                  secretKeyRef:
+                    name: cicd-service-account-token
+                    key: token
           resources:
             requests:
               memory: "1024Mi"
