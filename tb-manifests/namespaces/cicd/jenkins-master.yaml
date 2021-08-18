@@ -191,33 +191,33 @@ spec:
 
 ---
 ### Jenkins Service account ###
-#apiVersion: v1
-#kind: ServiceAccount
-#metadata:
-#  name: jenkins-account
-#  namespace: cicd
-#
-#---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: jenkins-account
+  namespace: cicd
+
+---
 #### Jenkins Role ###
-#kind: Role
-#apiVersion: rbac.authorization.k8s.io/v1
-#metadata:
-#  name: jenkins-role
-#  namespace: cicd
-#rules:
-#  - apiGroups: [“”]
-#    resources: [“pods”]
-#    verbs: [“create”,”delete”,”get”,”list”,”patch”,”update”,”watch”]
-#  - apiGroups: [“”]
-#    resources: [“pods/exec”]
-#    verbs: [“create”,”delete”,”get”,”list”,”patch”,”update”,”watch”]
-#  - apiGroups: [“”]
-#    resources: [“pods/log”]
-#    verbs: [“get”,”list”,”watch”]
-#  - apiGroups: [“”]
-#    resources: [“secrets”]
-#    verbs: [“get”]
-#
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: jenkins-role
+  namespace: cicd
+rules:
+  - apiGroups: [“”]
+    resources: [“pods”]
+    verbs: [“create”,”delete”,”get”,”list”,”patch”,”update”,”watch”]
+  - apiGroups: [“”]
+    resources: [“pods/exec”]
+    verbs: [“create”,”delete”,”get”,”list”,”patch”,”update”,”watch”]
+  - apiGroups: [“”]
+    resources: [“pods/log”]
+    verbs: [“get”,”list”,”watch”]
+  - apiGroups: [“”]
+    resources: [“secrets”]
+    verbs: [“get”]
+
 #---
 #### Jenkins Role Binding ###
 #apiVersion: rbac.authorization.k8s.io/v1
