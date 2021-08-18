@@ -83,8 +83,6 @@ spec:
           env:
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: /var/secrets/google/ec-service-account-config.json
-            - name: kubernetes_jenkins_token
-              value: /var/secrets/google/kubernetes_jenkins_token.json
             - name: DAC_JENKINS_USER
               valueFrom:
                 secretKeyRef:
@@ -191,60 +189,60 @@ spec:
 
 ---
 ### Jenkins Service account ###
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: jenkins-account
-  namespace: cicd
-
----
-### Jenkins Role ###
-kind: Role
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: jenkins-role
-  namespace: cicd
-rules:
-  - apiGroups: [“”]
-    resources: [“pods”]
-    verbs: [“create”,”delete”,”get”,”list”,”patch”,”update”,”watch”]
-  - apiGroups: [“”]
-    resources: [“pods/exec”]
-    verbs: [“create”,”delete”,”get”,”list”,”patch”,”update”,”watch”]
-  - apiGroups: [“”]
-    resources: [“pods/log”]
-    verbs: [“get”,”list”,”watch”]
-  - apiGroups: [“”]
-    resources: [“secrets”]
-    verbs: [“get”]
-
----
-### Jenkins Role Binding ###
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: jenkins-role-binding
-  namespace: cicd
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: jenkins-role
-subjects:
-  - kind: ServiceAccount
-    name: jenkins-account
-    namespace: cicd
-
----
-### Jenkins PersistentVolumeClaim ###
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: pvc-jenkins-home
-  namespace: cicd
-spec:
-  accessModes:
-    -  ReadWriteMany
-  storageClassName: regional-retained-pd-ssd
-  resources:
-    requests:
-    storage: 50Gi
+#apiVersion: v1
+#kind: ServiceAccount
+#metadata:
+#  name: jenkins-account
+#  namespace: cicd
+#
+#---
+#### Jenkins Role ###
+#kind: Role
+#apiVersion: rbac.authorization.k8s.io/v1
+#metadata:
+#  name: jenkins-role
+#  namespace: cicd
+#rules:
+#  - apiGroups: [“”]
+#    resources: [“pods”]
+#    verbs: [“create”,”delete”,”get”,”list”,”patch”,”update”,”watch”]
+#  - apiGroups: [“”]
+#    resources: [“pods/exec”]
+#    verbs: [“create”,”delete”,”get”,”list”,”patch”,”update”,”watch”]
+#  - apiGroups: [“”]
+#    resources: [“pods/log”]
+#    verbs: [“get”,”list”,”watch”]
+#  - apiGroups: [“”]
+#    resources: [“secrets”]
+#    verbs: [“get”]
+#
+#---
+#### Jenkins Role Binding ###
+#apiVersion: rbac.authorization.k8s.io/v1
+#kind: RoleBinding
+#metadata:
+#  name: jenkins-role-binding
+#  namespace: cicd
+#roleRef:
+#  apiGroup: rbac.authorization.k8s.io
+#  kind: Role
+#  name: jenkins-role
+#subjects:
+#  - kind: ServiceAccount
+#    name: jenkins-account
+#    namespace: cicd
+#
+#---
+#### Jenkins PersistentVolumeClaim ###
+#kind: PersistentVolumeClaim
+#apiVersion: v1
+#metadata:
+#  name: pvc-jenkins-home
+#  namespace: cicd
+#spec:
+#  accessModes:
+#    -  ReadWriteMany
+#  storageClassName: regional-retained-pd-ssd
+#  resources:
+#    requests:
+#    storage: 50Gi
