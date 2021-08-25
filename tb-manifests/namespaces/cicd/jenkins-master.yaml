@@ -67,7 +67,7 @@ spec:
     spec:
       containers:
         - name: jenkins-master
-          image: gcr.io/tranquility-base-images/tb-jenkins:v0.0.14
+          image: gcr.io/tranquility-base-images/tb-jenkins:v0.1.01
           args: ["--prefix=/jenkins-service"]
           securityContext:
             privileged: true
@@ -82,7 +82,9 @@ spec:
 #               mountPath: /var/secrets/google
           env:
             - name: GOOGLE_APPLICATION_CREDENTIALS
-              value: /var/secrets/google/ec-service-account-config.json
+              value: var/secrets/google/ec-service-account-config.json
+            - name: cicd-service-account-token
+              value: var/secrets/kube/cicd-service-account-token.txt
             - name: DAC_JENKINS_USER
               valueFrom:
                 secretKeyRef:
